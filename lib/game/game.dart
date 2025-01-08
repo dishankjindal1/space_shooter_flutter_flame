@@ -5,12 +5,14 @@ import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
+import 'package:flame_riverpod/flame_riverpod.dart';
 import 'package:flutter/painting.dart';
 import 'package:space_shooter_flutter_flame/game/enemy.dart';
+import 'package:space_shooter_flutter_flame/game/overlay/game_score_overlay.dart';
 import 'package:space_shooter_flutter_flame/game/player.dart';
 
 class SpaceShooterGame extends FlameGame
-    with PanDetector, HasCollisionDetection {
+    with RiverpodGameMixin, PanDetector, HasCollisionDetection {
   late Player player;
 
   @override
@@ -32,13 +34,14 @@ class SpaceShooterGame extends FlameGame
 
     add(player = Player());
 
-    add(
-      SpawnComponent(
-        factory: (index) => Enemy(),
-        period: 1,
-        area: Rectangle.fromLTWH(0, 0, size.x, -Enemy.enemySize),
-      ),
-    );
+    add(SpawnComponent(
+      factory: (index) => Enemy(),
+      period: 1,
+      area: Rectangle.fromLTWH(0, 0, size.x, -Enemy.enemySize),
+    ));
+
+    //Overlay
+    add(GameScoreOverlay());
   }
 
   @override

@@ -2,12 +2,17 @@ import 'dart:async';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame_riverpod/flame_riverpod.dart';
 import 'package:space_shooter_flutter_flame/game/bullet.dart';
 import 'package:space_shooter_flutter_flame/game/explosion.dart';
 import 'package:space_shooter_flutter_flame/game/game.dart';
+import 'package:space_shooter_flutter_flame/game/state/score_state/score_state.dart';
 
 class Enemy extends SpriteAnimationComponent
-    with HasGameRef<SpaceShooterGame>, CollisionCallbacks {
+    with
+        HasGameRef<SpaceShooterGame>,
+        CollisionCallbacks,
+        RiverpodComponentMixin {
   Enemy({super.position})
       : super(
           size: Vector2.all(enemySize),
@@ -54,6 +59,7 @@ class Enemy extends SpriteAnimationComponent
       removeFromParent();
       other.removeFromParent();
       game.add(Explosion(position: position));
+      ref.read(scoreStateProvider.notifier).addEnemy();
     }
   }
 }
