@@ -1,15 +1,15 @@
 import 'dart:async';
 
-import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:space_shooter_flutter_flame/game/game.dart';
 
-class Bullet extends SpriteAnimationComponent
+class Explosion extends SpriteAnimationComponent
     with HasGameRef<SpaceShooterGame> {
-  Bullet({super.position})
+  Explosion({super.position})
       : super(
-          size: Vector2.all(24),
+          size: Vector2.all(150),
           anchor: Anchor.center,
+          removeOnFinish: true,
         );
 
   @override
@@ -17,25 +17,13 @@ class Bullet extends SpriteAnimationComponent
     await super.onLoad();
 
     animation = await game.loadSpriteAnimation(
-      'shot_2.png',
+      'purple_explosion.png',
       SpriteAnimationData.sequenced(
         amount: 4,
         stepTime: 0.2,
-        textureSize: Vector2.all(16),
+        textureSize: Vector2.all(32),
+        loop: false,
       ),
     );
-
-    add(RectangleHitbox(collisionType: CollisionType.passive));
-  }
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-
-    position.y += dt * -500;
-
-    if (position.y < -height) {
-      removeFromParent();
-    }
   }
 }
