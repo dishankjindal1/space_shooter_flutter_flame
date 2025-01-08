@@ -16,9 +16,11 @@ class Player extends SpriteAnimationComponent
         RiverpodComponentMixin {
   Player()
       : super(
-          size: Vector2.all(60),
+          size: Vector2.all(playerSize),
           anchor: Anchor.center,
         );
+
+  static const playerSize = 60.0;
 
   late final SpawnComponent _bulletSpawn;
 
@@ -26,7 +28,7 @@ class Player extends SpriteAnimationComponent
   FutureOr<void> onLoad() async {
     await super.onLoad();
 
-    position = gameRef.size / 2;
+    position = Vector2(gameRef.size.x / 2, gameRef.size.y - playerSize);
 
     animation = await game.loadSpriteAnimation(
       'starfighter_2.png',
@@ -66,7 +68,14 @@ class Player extends SpriteAnimationComponent
   }
 
   void move(Vector2 delta) {
-    position.add(delta);
+    var newPos = position + delta;
+
+    if (newPos.x > (playerSize * 0.25) &&
+        newPos.x < gameRef.size.x - (playerSize * 0.25) &&
+        newPos.y > (playerSize * 0.75) &&
+        newPos.y < gameRef.size.y - (playerSize * 0.75)) {
+      position = newPos;
+    }
   }
 
   void startShooting() {

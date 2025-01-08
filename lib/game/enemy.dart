@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -15,7 +16,6 @@ class Enemy extends SpriteAnimationComponent
         RiverpodComponentMixin {
   Enemy({super.position})
       : super(
-          size: Vector2.all(enemySize),
           anchor: Anchor.center,
         );
 
@@ -24,6 +24,8 @@ class Enemy extends SpriteAnimationComponent
   @override
   FutureOr<void> onLoad() async {
     await super.onLoad();
+
+    size = Vector2.all(Random().nextInt(50) + enemySize);
 
     animation = await game.loadSpriteAnimation(
       'alien_1.png',
